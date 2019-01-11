@@ -1,0 +1,14 @@
+2019-01-11 22:17:53 +00:00 GMT | start
+http://localhost:8000/1000?style=red | 404 | 0.011201
+http://localhost:8000/1001?style=red | 404 | 0.011145
+http://localhost:8000/1002?style=red | 404 | 0.011125
+http://localhost:8000/1003?style=red | 404 | 0.010969
+http://localhost:8000/1004?style=red | 404 | 0.010945
+http://localhost:8000/1005?style=red | 404 | 0.010919
+http://localhost:8000/1006?style=red | 404 | 0.010892
+http://localhost:8000/1007?style=red | 404 | 0.010862
+http://localhost:8000/1008?style=red | 404 | 0.010845
+http://localhost:8000/1009?style=red | 404 | 0.010819
+http://localhost:8000/1010?style=red | 404 | 0.010766
+http://localhost:8000/1011?style=red | 404 | 0.010758
+http://localhost:8000/1012?style=red | 404 | 0.010758
