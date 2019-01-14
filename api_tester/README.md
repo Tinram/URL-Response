@@ -21,3 +21,8 @@ In *api_tester.php* &ndash; configure the API URLs, API URL increment sequence, 
 ### Execute
 
         php api_tester.php
+
+
+## License
+
+API Tester is released under the [GPL v.3](https://www.gnu.org/licenses/gpl-3.0.html).
