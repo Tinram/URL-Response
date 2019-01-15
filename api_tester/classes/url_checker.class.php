@@ -15,11 +15,14 @@ final class URLChecker
         *
         * @author         Martin Latter
         * @copyright      Martin Latter, 07/01/2019
-        * @version        0.04
+        * @version        0.05
         * @license        GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
         * @link           https://github.com/Tinram/URL-Response.git
     */
 
+
+    /* @var string, user agent */
+    private $sUserAgent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0';
 
     /* @var array, cURL options holder */
     private $aOpts = [];
@@ -63,10 +66,10 @@ final class URLChecker
     {
         $this->aOpts =
         [
-            CURLOPT_HEADER => true, # no headers
+            CURLOPT_HEADER => false,
             CURLOPT_TIMEOUT => 30,
             CURLOPT_NOBODY => true,
-            CURLOPT_USERAGENT => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0',
+            CURLOPT_USERAGENT => $this->sUserAgent,
             CURLOPT_FAILONERROR => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CONNECTTIMEOUT => 5,
