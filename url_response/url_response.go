@@ -8,7 +8,7 @@
 	*
 	* @author        Martin Latter
 	* @copyright     Martin Latter 10/12/2018
-	* @version       0.04
+	* @version       0.05
 	* @license       GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
 	* @link          https://github.com/Tinram/URL-Response.git
 */
@@ -118,21 +118,23 @@ func fetch(urls []string, channelLimit int) <-chan urlResults {
 			ht := &http.Transport{
 				IdleConnTimeout: 5 * time.Second,
 			}
-			client := &http.Client{Transport: ht}
+			client := &http.Client{
+				Transport: ht,
+				Timeout:   10 * time.Second,
+			}
 
 			start := time.Now()
 
 			resp, err := client.Get(url)
+
 			if err != nil {
 				fmt.Println(err)
+			} else {
+				defer resp.Body.Close()
+				resp.Close = true
+				elapsed := time.Since(start).Seconds()
+				results <- urlResults{Error: err, URL: url, ResponseCode: resp.StatusCode, ResponseMsg: http.StatusText(resp.StatusCode), Time: elapsed}
 			}
-
-			defer resp.Body.Close()
-			resp.Close = true
-
-			elapsed := time.Since(start).Seconds()
-
-			results <- urlResults{Error: err, URL: url, ResponseCode: resp.StatusCode, ResponseMsg: http.StatusText(resp.StatusCode), Time: elapsed}
 
 		}(url)
 	}
