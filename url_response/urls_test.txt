@@ -1,8 +1,8 @@
-# invalid URLs test
-
 https://www.bbc.co.uk
-adfd
 http://x.com
 example.com
 xz
 https://www.nytimes.com/
+127.0.0.1
+http://localhost
+http://127.0.0.1
