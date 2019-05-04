@@ -8,7 +8,7 @@
 	*
 	* @author        Martin Latter
 	* @copyright     Martin Latter 10/12/2018
-	* @version       0.05
+	* @version       0.06
 	* @license       GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
 	* @link          https://github.com/Tinram/URL-Response.git
 */
@@ -22,6 +22,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/asaskevich/govalidator"
@@ -38,10 +39,10 @@ type urlResults struct {
 func main() {
 
 	const LOGNAME string = "url_response.log"
-	var urls []string
+	const CHANNEL_LIMIT = 100 // 100 is good for ~1000 URLs
 
-	filename := "urls.txt"
-	channelLimit := 100 // 100 is good for ~1000 URLs
+	var filename string = "urls.txt"
+	var urls []string
 
 	flag.Usage = func() {
 		usageText := "  url_response [-f]\n\tdefault urls file is urls.txt with one URL per line\n\tuse -f to specify alternative filename\n"
@@ -81,7 +82,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	results := fetch(urls, channelLimit)
+	results := fetch(urls, CHANNEL_LIMIT)
 
 	/* prepare logging to file in loop */
 	flog, errLog := os.OpenFile(LOGNAME, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0640)
@@ -128,7 +129,14 @@ func fetch(urls []string, channelLimit int) <-chan urlResults {
 			resp, err := client.Get(url)
 
 			if err != nil {
-				fmt.Println(err)
+				s := err.Error()
+				if strings.Index(s, "request canceled") > -1 {
+					fmt.Println("unreachable: " + url)
+				} else if strings.Index(s, "no such host") > -1 {
+					fmt.Println("no host: " + url)
+				} else {
+					fmt.Println(err)
+				}
 			} else {
 				defer resp.Body.Close()
 				resp.Close = true
