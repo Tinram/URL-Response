@@ -55,12 +55,43 @@ URL | HTTP code | HTTP msg | response time |
 https://www.bbc.co.uk/ | 200 | OK | 0.11741 s |
 
 
+## URL Monitor
+
+A variation of URL Response to constantly monitor URL status codes in a terminal.
+
+
+### Run
+
+```bash
+    ./url_monitor
+```
+
+... using *urls.txt*
+
+else an alternative filename:
+
+```bash
+    ./url_monitor -f urls_test.txt
+```
+
+Set check delay to 2 seconds:
+
+```bash
+    ./url_monitor -t 2
+```
+
+(default is 30 seconds)
+
+----
+
+
 ## Credits
 
 + Mike Schilli: inspiration for revised and more effective channel pattern.
 + Alex Saskevich: govalidator URL check.
++ Gookit: terminal color rendering.
 
 
 ## License
 
-URL Response is released under the [GPL v.3](https://www.gnu.org/licenses/gpl-3.0.html).
+URL Response and URL Monitor are released under the [GPL v.3](https://www.gnu.org/licenses/gpl-3.0.html).
