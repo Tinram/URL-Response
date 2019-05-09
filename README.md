@@ -11,4 +11,6 @@ Test API GET endpoints and response times with cURL multi.
 
 ## [URL Response](https://github.com/Tinram/URL-Response/tree/master/url_response)
 
-Parse a URL list checking HTTP responses, facilitated by Go's concurrency.
+1. Parse a URL list checking HTTP responses, facilitated by Go's concurrency.
+
+2. Constantly monitor URL status/time responses in a terminal.
