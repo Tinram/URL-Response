@@ -8,7 +8,7 @@
 	*
 	* @author        Martin Latter
 	* @copyright     Martin Latter 01/05/2019
-	* @version       0.04
+	* @version       0.05
 	* @license       GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
 	* @link          https://github.com/Tinram/URL-Response.git
 */
@@ -49,24 +49,30 @@ func main() {
 	mainrun := false
 	filename := "urls.txt"
 	checktime := 30
+	timeout := 6
 	red := color.FgRed.Render
 	green := color.FgGreen.Render
 
 	flag.Usage = func() {
-		usageText := "  url_response [-f] [-t]\n\tdefault urls file is urls.txt with one URL per line\n\t-f to use alternative filename\n\t-t to change check time duration (default: 30s)\n"
+		usageText := "  url_response [-f] [-d] [-t]\n\tdefault urls file is urls.txt with one URL per line\n\t-f to use alternative filename\n\t-d to change check time duration (default: 30s)\n\t-t to change request timeout (default: 6s)\n"
 		fmt.Fprintf(os.Stderr, "%s", usageText)
 	}
 
 	f := flag.String("f", "", "specify alternative filename")
-	t := flag.String("t", "", "specify alternative check time duration")
+	d := flag.String("d", "", "specify check time duration")
+	t := flag.String("t", "", "specify request timeout")
 	flag.Parse()
 
 	if *f != "" {
 		filename = *f
 	}
 
+	if *d != "" {
+		checktime, _ = strconv.Atoi(*d)
+	}
+
 	if *t != "" {
-		checktime, _ = strconv.Atoi(*t)
+		timeout, _ = strconv.Atoi(*t)
 	}
 
 	c := exec.Command("clear")
@@ -112,7 +118,7 @@ func main() {
 
 		mainrun = true
 
-		results := fetch(urls, channelLimit)
+		results := fetch(urls, channelLimit, timeout)
 
 		fmt.Println()
 
@@ -153,7 +159,7 @@ func main() {
 
 }
 
-func fetch(urls []string, channelLimit int) <-chan urlResults {
+func fetch(urls []string, channelLimit int, timeout int) <-chan urlResults {
 
 	results := make(chan urlResults, channelLimit)
 
@@ -163,11 +169,11 @@ func fetch(urls []string, channelLimit int) <-chan urlResults {
 
 			/* avoid default http client */
 			ht := &http.Transport{
-				IdleConnTimeout: 5 * time.Second,
+				IdleConnTimeout: time.Duration(timeout) * time.Second,
 			}
 			client := &http.Client{
 				Transport: ht,
-				Timeout:   10 * time.Second,
+				Timeout:   time.Duration(timeout) * time.Second,
 			}
 
 			start := time.Now()
