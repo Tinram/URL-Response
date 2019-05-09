@@ -8,7 +8,7 @@
 	*
 	* @author        Martin Latter
 	* @copyright     Martin Latter 10/12/2018
-	* @version       0.06
+	* @version       0.07
 	* @license       GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
 	* @link          https://github.com/Tinram/URL-Response.git
 */
@@ -38,11 +38,11 @@ type urlResults struct {
 
 func main() {
 
-	const LOGNAME string = "url_response.log"
-	const CHANNEL_LIMIT = 100 // 100 is good for ~1000 URLs
+	const logName string = "url_response.log"
+	const channelLimit = 100 // 100 is good for ~1000 URLs
 
-	var filename string = "urls.txt"
 	var urls []string
+	var filename = "urls.txt"
 
 	flag.Usage = func() {
 		usageText := "  url_response [-f]\n\tdefault urls file is urls.txt with one URL per line\n\tuse -f to specify alternative filename\n"
@@ -82,10 +82,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	results := fetch(urls, CHANNEL_LIMIT)
+	results := fetch(urls, channelLimit)
 
 	/* prepare logging to file in loop */
-	flog, errLog := os.OpenFile(LOGNAME, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0640)
+	flog, errLog := os.OpenFile(logName, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0640)
 	if errLog != nil {
 		log.Fatal(errLog)
 	}
@@ -95,15 +95,12 @@ func main() {
 
 		result := <-results
 
-		if result.Error == nil {
+		output := fmt.Sprintf("%s | %d | %s | %.5f s", result.URL, result.ResponseCode, result.ResponseMsg, result.Time)
+		fmt.Println(output)
 
-			output := fmt.Sprintf("%s | %d | %s | %.5f s", result.URL, result.ResponseCode, result.ResponseMsg, result.Time)
-			fmt.Println(output)
-
-			/* log */
-			log.SetOutput(flog)
-			log.Printf("| " + output)
-		}
+		/* log */
+		log.SetOutput(flog)
+		log.Printf("| " + output)
 	}
 }
 
@@ -117,7 +114,7 @@ func fetch(urls []string, channelLimit int) <-chan urlResults {
 
 			/* avoid default http client */
 			ht := &http.Transport{
-				IdleConnTimeout: 5 * time.Second,
+				IdleConnTimeout: 6 * time.Second,
 			}
 			client := &http.Client{
 				Transport: ht,
@@ -130,12 +127,15 @@ func fetch(urls []string, channelLimit int) <-chan urlResults {
 
 			if err != nil {
 				s := err.Error()
-				if strings.Index(s, "request canceled") > -1 {
-					fmt.Println("unreachable: " + url)
-				} else if strings.Index(s, "no such host") > -1 {
-					fmt.Println("no host: " + url)
+				elapsed := time.Since(start).Seconds()
+				if strings.Index(s, "no such host") > -1 {
+					results <- urlResults{Error: err, URL: url, ResponseCode: 0, ResponseMsg: "no host", Time: elapsed}
+				} else if strings.Index(s, "request canceled") > -1 {
+					results <- urlResults{Error: err, URL: url, ResponseCode: 0, ResponseMsg: "unreachable", Time: elapsed}
+				} else if strings.Index(s, "connection refused") > -1 {
+					results <- urlResults{Error: err, URL: url, ResponseCode: 0, ResponseMsg: "connection refused", Time: elapsed}
 				} else {
-					fmt.Println(err)
+					results <- urlResults{Error: err, URL: url, ResponseCode: 0, ResponseMsg: err.Error(), Time: elapsed}
 				}
 			} else {
 				defer resp.Body.Close()
