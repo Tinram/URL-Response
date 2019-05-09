@@ -4,11 +4,11 @@
 	* Parse a file of URLs and continuously check HTTP codes and response times.
 	*
 	* Usage:
-	*                ./url_monitor [-f <filename>] [-t <delay_secs>]
+	*                ./url_monitor [-f <filename>] [-d <delay_secs>] [-t <timeout_secs>]
 	*
 	* @author        Martin Latter
 	* @copyright     Martin Latter 01/05/2019
-	* @version       0.05
+	* @version       0.06
 	* @license       GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
 	* @link          https://github.com/Tinram/URL-Response.git
 */
