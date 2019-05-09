@@ -57,7 +57,7 @@ https://www.bbc.co.uk/ | 200 | OK | 0.11741 s |
 
 ## URL Monitor
 
-A variation of URL Response to constantly monitor URL status codes in a terminal.
+A variation of URL Response to constantly monitor URL status/time responses in a terminal.
 
 
 ### Run
@@ -74,13 +74,21 @@ else an alternative filename:
     ./url_monitor -f urls_test.txt
 ```
 
-Set check delay to 2 seconds:
+Set URL check delay to 2 seconds:
 
 ```bash
-    ./url_monitor -t 2
+    ./url_monitor -d 2
 ```
 
 (default is 30 seconds)
+
+Set response timeout to 4 seconds:
+
+```bash
+    ./url_monitor -t 4
+```
+
+(default is 6 seconds)
 
 ----
 
