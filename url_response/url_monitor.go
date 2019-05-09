@@ -8,7 +8,7 @@
 	*
 	* @author        Martin Latter
 	* @copyright     Martin Latter 01/05/2019
-	* @version       0.03
+	* @version       0.04
 	* @license       GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
 	* @link          https://github.com/Tinram/URL-Response.git
 */
@@ -41,13 +41,13 @@ type urlResults struct {
 
 func main() {
 
-	const CHANNEL_LIMIT = 100
+	const channelLimit = 100
 
 	var urls []string
-	var output string = ""
-	var filename string = "urls.txt"
-	var mainrun bool = false
+	var output string
 
+	mainrun := false
+	filename := "urls.txt"
 	checktime := 30
 	red := color.FgRed.Render
 	green := color.FgGreen.Render
@@ -112,7 +112,7 @@ func main() {
 
 		mainrun = true
 
-		results := fetch(urls, CHANNEL_LIMIT)
+		results := fetch(urls, channelLimit)
 
 		fmt.Println()
 
@@ -124,14 +124,28 @@ func main() {
 
 				switch result.ResponseCode {
 
-				case 200, 203, 206, 300, 301, 302, 303, 304, 307, 308:
-					output = fmt.Sprintf(" %s  %s   %.3fs   %s", green(result.ResponseCode), result.ResponseMsg, result.Time, result.URL)
-				default:
-					output = fmt.Sprintf(" %s  %s   %.3fs   %s", red(result.ResponseCode), result.ResponseMsg, result.Time, result.URL)
+					case 200, 203, 206, 300, 301, 302, 303, 304, 307, 308:
+						output = fmt.Sprintf(" %s  %s   %.3fs   %s", green(result.ResponseCode), result.ResponseMsg, result.Time, result.URL)
+
+					default:
+						output = fmt.Sprintf(" %s  %s   %.3fs   %s", red(result.ResponseCode), result.ResponseMsg, result.Time, result.URL)
+				}
+			} else {
+
+				switch result.ResponseCode {
+
+					case 901:
+						output = fmt.Sprintf(" %s %s        %s", red("---"), red(result.ResponseMsg), result.URL)
+					case 902:
+						output = fmt.Sprintf(" %s %s    %s", red("---"), red(result.ResponseMsg), result.URL)
+					case 903:
+						output = fmt.Sprintf(" %s %s   %s", red("---"), red(result.ResponseMsg), result.URL)
 				}
 
-				fmt.Println(output)
 			}
+
+			fmt.Println(output)
+
 		}
 
 		time.Sleep(time.Second * time.Duration(checktime))
@@ -162,11 +176,12 @@ func fetch(urls []string, channelLimit int) <-chan urlResults {
 
 			if err != nil {
 				s := err.Error()
-				red := color.FgRed.Render
-				if strings.Index(s, "request canceled") > -1 {
-					fmt.Println(red(" unreachable        ") + url)
-				} else if strings.Index(s, "no such host") > -1 {
-					fmt.Println(red(" no host            ") + url)
+				if strings.Index(s, "no such host") > -1 {
+					results <- urlResults{Error: err, URL: url, ResponseCode: 901, ResponseMsg: "no host", Time: 0}
+				} else if strings.Index(s, "request canceled") > -1 {
+					results <- urlResults{Error: err, URL: url, ResponseCode: 902, ResponseMsg: "unreachable", Time: 0}
+				} else if strings.Index(s, "connection refused") > -1 {
+					results <- urlResults{Error: err, URL: url, ResponseCode: 903, ResponseMsg: "conn refused", Time: 0}
 				} else {
 					fmt.Println(err)
 				}
