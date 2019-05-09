@@ -55,12 +55,15 @@ URL | HTTP code | HTTP msg | response time |
 https://www.bbc.co.uk/ | 200 | OK | 0.11741 s |
 
 
-## URL Monitor
-
-A variation of URL Response to constantly monitor URL status/time responses in a terminal.
+----
 
 
-### Run
+# URL Monitor
+
+#### A variation of URL Response to constantly monitor URL status/time responses in a terminal.
+
+
+## Run
 
 ```bash
     ./url_monitor
@@ -89,6 +92,7 @@ Set response timeout to 4 seconds:
 ```
 
 (default is 6 seconds)
+
 
 ----
 
