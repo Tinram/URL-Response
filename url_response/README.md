@@ -1,28 +1,12 @@
 
 # URL Response
 
-
 #### Parse a URL list checking HTTP codes and response times, facilitated by Go's concurrency.
 
 
-## Build
+## Executable
 
-```bash
-    git clone https://github.com/Tinram/URL-Response.git
-    cd URL-Response/url_response
-```
-
-```bash
-    go get github.com/asaskevich/govalidator
-
-    go build url_response.go
-```
-
-For a slightly smaller executable:
-
-```bash
-    go build -ldflags="-s -w" url_response.go
-```
+Linux executable available from [Releases](https://github.com/Tinram/URL-Response/releases).
 
 
 ## Run
@@ -55,12 +39,37 @@ URL | HTTP code | HTTP msg | response time |
 https://www.bbc.co.uk/ | 200 | OK | 0.11741 s |
 
 
+## Build
+
+```bash
+    git clone https://github.com/Tinram/URL-Response.git
+    cd URL-Response/url_response
+```
+
+```bash
+    go get github.com/asaskevich/govalidator
+
+    go build url_response.go
+```
+
+For a slightly smaller executable:
+
+```bash
+    go build -ldflags="-s -w" url_response.go
+```
+
+
 ----
 
 
 # URL Monitor
 
 #### A variation of URL Response to constantly monitor URL status/time responses in a terminal.
+
+
+## Executable
+
+Linux executable available from [Releases](https://github.com/Tinram/URL-Response/releases).
 
 
 ## Run
