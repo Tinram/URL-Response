@@ -4,6 +4,10 @@
 #### Parse a URL list checking HTTP codes and response times, facilitated by Go's concurrency.
 
 
+[1]: https://tinram.github.io/images/url-response.png
+![URL-Response][1]
+
+
 ## Executable
 
 Linux executable available from [Releases](https://github.com/Tinram/URL-Response/releases).
@@ -65,6 +69,10 @@ For a slightly smaller executable:
 # URL Monitor
 
 #### A variation of URL Response to constantly monitor URL status/time responses in a terminal.
+
+
+[2]: https://tinram.github.io/images/url-monitor.png
+![URL-Response monitor][2]
 
 
 ## Executable
