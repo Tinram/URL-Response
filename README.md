@@ -6,15 +6,17 @@
 
 ## [URL Response](https://github.com/Tinram/URL-Response/tree/master/url_response)
 
+
+Constantly monitor URL status / time responses in a terminal.
+
+[1]: https://tinram.github.io/images/url-monitor.png
+![URL-Response monitor][1]
+
+
 Parse a URL list checking HTTP responses, facilitated by Go's concurrency.
 
-[1]: https://tinram.github.io/images/url-response.png
-![URL-Response][1]
-
-Constantly monitor URL status/time responses in a terminal.
-
-[2]: https://tinram.github.io/images/url-monitor.png
-![URL-Response monitor][2]
+[2]: https://tinram.github.io/images/url-response.png
+![URL-Response][2]
 
 
 ## [API Tester](https://github.com/Tinram/URL-Response/tree/master/api_tester)
