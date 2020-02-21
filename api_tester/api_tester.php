@@ -12,11 +12,12 @@
     *
     * @author         Martin Latter
     * @copyright      Martin Latter 07/01/2019
-    * @version        0.02
+    * @version        0.03
     * @license        GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
     * @link           https://github.com/Tinram/URL-Response.git
 */
 
+declare(strict_types=1);
 
 require('classes/url_checker.class.php');
 

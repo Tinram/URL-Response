@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tinram\URLChecker;
 
+
 final class URLChecker
 {
     /**
@@ -11,31 +12,37 @@ final class URLChecker
         *
         * URL Tester and benchmarker using cURL multi for concurrency.
         *
-        * Coded to PHP 7.1
+        * Coded to PHP 7.2
         *
         * @author         Martin Latter
         * @copyright      Martin Latter, 07/01/2019
-        * @version        0.05
+        * @version        0.06
         * @license        GNU GPL version 3.0 (GPL v3); http://www.gnu.org/licenses/gpl.html
         * @link           https://github.com/Tinram/URL-Response.git
     */
 
 
-    /* @var string, user agent */
+    /** @var string $sUserAgent, user agent */
     private $sUserAgent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0';
 
-    /* @var array, cURL options holder */
+    /** @var array<mixed> $aOpts, cURL options holder */
     private $aOpts = [];
 
-    /* @var array, URLs holder */
+    /** @var array<string> $aURLs, URLs holder */
     private $aURLs = [];
 
-    /* @var string, default logfile name */
+    /** @var string $sLogfile, default logfile name */
     private $sLogfile = 'url_checker.log';
 
-    /* @var int, default cURL request batch size */
+    /** @var int $iBatchSize, default cURL request batch size */
     private $iBatchSize = 100;
 
+
+    /**
+        * Constructor: initiate and execute URL processing.
+        *
+        * @param   array<string> $aURLs, URLs
+    */
 
     public function __construct(array $aURLs = null)
     {
@@ -62,7 +69,7 @@ final class URLChecker
         * @return  void
     */
 
-    private function setup(): void    /* remove :void for PHP 7.0 */
+    private function setup(): void
     {
         $this->aOpts =
         [
@@ -81,7 +88,7 @@ final class URLChecker
     /**
         * Split array of URLs into chunks/batches for cURL processing.
         *
-        * @return  array
+        * @return  array<array>
     */
 
     private function createBatches(): array
@@ -93,10 +100,12 @@ final class URLChecker
     /**
         * Process URL arrays by cURL multi, deliberately enforcing a slight delay per batch.
         *
+        * @param   array<array> $aBatches, batch of URLs
+        *
         * @return  string, time details
     */
 
-    private function runner($aBatches): string
+    private function runner(array $aBatches): string
     {
         $sOutput = '';
         $fTS = microtime(true);
@@ -118,6 +127,8 @@ final class URLChecker
 
     /**
         * Process URL array with cURL multi.
+        *
+        * @param   array<string> $aURLs, URLs
         *
         * @return  void
     */
@@ -177,12 +188,13 @@ final class URLChecker
         *
         * @param   string $sMessage, message to log
         * @param   boolean $bTimestamp, toggle to include/omit timestamp on line
+        *
         * @return  void
     */
 
     private function logWrite(string $sMessage = '', bool $bTimestamp = false): void
     {
-        if (empty($sMessage))
+        if ($sMessage === '')
         {
             return;
         }
@@ -194,7 +206,7 @@ final class URLChecker
 
         $iLogWrite = file_put_contents($this->sLogfile, $sMessage . PHP_EOL, FILE_APPEND);
 
-        if (!$iLogWrite)
+        if ($iLogWrite === false)
         {
             die('could not write to logfile ' . $this->sLogfile . PHP_EOL);
         }
@@ -217,12 +229,13 @@ final class URLChecker
         * Output message.
         *
         * @param   string $sMessage, message to print
+        *
         * @return  void
     */
 
     private function outputMessage(string $sMessage = ''): void
     {
-        if (empty($sMessage))
+        if ($sMessage === '')
         {
             return;
         }
